@@ -68,7 +68,7 @@ services:
          - prometheus
        volumes:
          - ./grafana:/var/lib/grafana
-         - ./grafana/provisioning/:/etc/grafana/provisioning/
+         - ./grafana/provisioning/:/conf/provisioning/
        env_file:
          - ./grafana/config.monitoring
 
