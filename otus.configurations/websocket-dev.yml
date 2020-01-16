@@ -1,0 +1,34 @@
+spring:
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  data:
+    mongodb:
+      host: mongodb
+      database: chat
+      port: 27017
+
+server:
+  port: 8088
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, env, loggers, logfile, metrics, prometheus
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus: enabled    
+    shutdown:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true 
+
+app:
+  jwt:
+    signingkey: 123

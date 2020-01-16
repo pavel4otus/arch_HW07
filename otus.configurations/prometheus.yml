@@ -1,0 +1,56 @@
+#Global configurations
+global:
+  scrape_interval:     5s # Set the scrape interval to every 5 seconds.
+  evaluation_interval: 5s # Evaluate rules every 5 seconds.
+scrape_configs:
+  - job_name: 'admin'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['admin:8081']
+
+  - job_name: 'authentication'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['authentication:9999']
+
+
+  - job_name: 'basket'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['basket:8083']
+
+  - job_name: 'catalog'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['catalog:8082']
+
+  - job_name: 'notification'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['notification:8086']
+
+  - job_name: 'order'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['order:8084']
+
+  - job_name: 'registration'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['registration:8085']
+
+  - job_name: 'websocket'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['websocket:8088']
+
+#  - job_name: 'config'
+#    metrics_path: '/actuator/prometheus'
+#    static_configs:
+#      - targets: ['config:7777']
+
+  - job_name: 'hzcatalog'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['hzcatalog:8090']
+

@@ -1,0 +1,49 @@
+spring:
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+  application:
+    name: hzcatalog
+
+
+server:
+  port: 8090
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, env, loggers, logfile, metrics, prometheus
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus: enabled    
+    shutdown:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true 
+
+app:
+  jwt:
+    signingkey: 123
+  hazelcast:
+    server: hazelcast
+    username: dev
+    password: dev-pass
+  brands:
+    url: http://catalog:8082/microservices/v1/catalog/brands
+    ttl: 60
+  categories:
+    url: http://catalog:8082/microservices/v1/catalog/categories
+    ttl: 60
+  warehouses:
+    url: http://catalog:8082/microservices/v1/catalog/warehouses
+    ttl: 5
+  catalog:
+    url: http://catalog:8082/microservices/v2/catalog
+    ttl: 30

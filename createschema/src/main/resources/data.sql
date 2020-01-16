@@ -1,0 +1,124 @@
+-- admin / passw0rd
+INSERT INTO oauth_client_details (client_id, client_secret, scope, authorized_grant_types, authorities,
+                                  access_token_validity)
+VALUES ('admin', '$2y$12$Aa5ruejFpTeJzAXG7IoxYOtDfepTnXsrlGwsZV9KPfh6OAB4J9bb2', 'read,write',
+        'password,refresh_token,client_credentials', 'ROLE_CLIENT', 300);
+
+
+--
+-- склады
+--
+insert into warehouses(name, contacts, schedule, address) values ('Склад 1', 'sk1@mail.ru', 'с 10.00 до 21.00', 'адрес склада 1');
+insert into warehouses(name, contacts, schedule, address) values ('Склад 2', '8(495)123-45-67', 'с 11.00 до 22.00', 'адрес склада 2');
+insert into warehouses(name, contacts, schedule, address) values ('Склад 3', '8(22390)121212', 'с 12.00 до 23.00', 'адрес склада 3');
+insert into warehouses(name, contacts, schedule, address) values ('Склад 4', '8(1212)121212', 'с 13.00 до 24.00', 'адрес склада 4');
+insert into warehouses(name, contacts, schedule, address) values ('Склад 5', '8(800)1220292009', 'с 14.00 до 19.00', 'адрес склада 5');
+
+
+--
+-- бренды
+--
+insert into brands(code, name, description) values ('BOSH', 'Bosch', '');
+insert into brands(code, name, description) values ('SIEMENS', 'Siemens', '');
+insert into brands(code, name, description) values ('CADDY', 'Cadillac', '');
+insert into brands(code, name, description) values ('VAZ', 'ВАЗ', '');
+
+--
+-- категории
+--
+insert into categories(code, name) values ('ELECTRO', 'Бытовая электроника');
+insert into categories(code, name) values ('PHONES', 'Сотовые телефоны');
+insert into categories(code, name) values ('BOOKS', 'Книги');
+insert into categories(code, name) values ('DIGITAL', 'Цифровые товары');
+
+--
+-- статусы заказа
+--
+insert into statuses(code, name) values ( 'NEW', 'Создан');
+insert into statuses(code, name) values ( 'CREATED', 'Оформлен');
+insert into statuses(code, name) values ( 'PAYED', 'Оплачен');
+insert into statuses(code, name) values ( 'TO_ASSEMBLED', 'Передан для сборки');
+insert into statuses(code, name) values ( 'ASSEMBLING', 'Собирается');
+insert into statuses(code, name) values ( 'ASSEMBLED', 'Собран');
+insert into statuses(code, name) values ( 'TO_TRANSIT', 'Передан для отправки');
+insert into statuses(code, name) values ( 'IN_TRANSIT', 'В пути');
+insert into statuses(code, name) values ( 'DELIVERED', 'Доставлен в конечную точку');
+insert into statuses(code, name) values ( 'RECEIVED', 'Получен клиентом');
+insert into statuses(code, name) values ( 'CANCELED', 'Отменен');
+
+--
+-- пользователи пароль у всех 12345
+--
+insert into users(username, password, fio, phone, enabled, role, address) values ( 'admin@mail.ru', '$2a$10$j2tFtUiRohlLp8HMfXAcD.clyBy50LGR6ntj2yRMJWJb1L9J4vP8m', 'Admin', '+7(921)123-48-11',   true, 'ROLE_ADMIN', 'адрес 1');
+insert into users(username, password, fio, phone, enabled, role, address) values ( 'test2@mail.ru', '$2a$10$j2tFtUiRohlLp8HMfXAcD.clyBy50LGR6ntj2yRMJWJb1L9J4vP8m', 'Петров', '+7(921)123-48-12',  true, 'ROLE_USER', 'адрес 2');
+insert into users(username, password, fio, phone, enabled, role, address) values ( 'test3@mail.ru', '$2a$10$j2tFtUiRohlLp8HMfXAcD.clyBy50LGR6ntj2yRMJWJb1L9J4vP8m', 'Сидоров', '+7(921)123-48-13', true, 'ROLE_USER', 'адрес 3');
+insert into users(username, password, fio, phone, enabled, role, address) values ( 'test4@mail.ru', '$2a$10$j2tFtUiRohlLp8HMfXAcD.clyBy50LGR6ntj2yRMJWJb1L9J4vP8m', 'Кузнецов', '+7(921)123-48-14',true, 'ROLE_USER', 'адрес 4');
+insert into users(username, password, fio, phone, enabled, role, address) values ( 'test5@mail.ru', '$2a$10$j2tFtUiRohlLp8HMfXAcD.clyBy50LGR6ntj2yRMJWJb1L9J4vP8m', 'Лавров',  '+7(921)123-48-15', true, 'ROLE_USER', 'адрес 5');
+insert into users(username, password, fio, phone, enabled, role, address) values ( 'test6@mail.ru', '$2a$10$j2tFtUiRohlLp8HMfXAcD.clyBy50LGR6ntj2yRMJWJb1L9J4vP8m', 'Козин', '+7(921)123-48-16',   true, 'ROLE_USER', 'адрес 6');
+
+insert into authorities(username, authority) values ('test2@mail.ru', 'ROLE_USER');
+insert into authorities(username, authority) values ('test3@mail.ru', 'ROLE_USER');
+insert into authorities(username, authority) values ('test4@mail.ru', 'ROLE_USER');
+insert into authorities(username, authority) values ('test5@mail.ru', 'ROLE_USER');
+insert into authorities(username, authority) values ('test6@mail.ru', 'ROLE_USER');
+insert into authorities(username, authority) values ('admin@mail.ru', 'ROLE_ADMIN');
+
+--
+-- тип цены
+--
+--insert into typeprice( id, name) values(  1, 'Обычная цена');
+--insert into typeprice( id, name) values( 99, 'Корпоративный клиент');
+
+--
+-- товары
+--
+insert into goods( skud, name, description, category_id, brand_id) values ( 1, 'Телевизор 1', 'Телевизр', 1, 1);
+insert into goods( skud, name, description, category_id, brand_id) values ( 1, 'Телевизор 2', 'Телевизр', 1, 2);
+insert into goods( skud, name, description, category_id, brand_id) values ( 1, 'Телевизор 3', 'Телевизр', 1, 3);
+insert into goods( skud, name, description, category_id, brand_id) values ( 1, 'Сотовый телефон 1', 'Сотовый телефон', 2, 2);
+insert into goods( skud, name, description, category_id, brand_id) values ( 1, 'Сотовый телефон 2', 'Сотовый телефон', 2, 2);
+
+insert into goods_spb( skud, name, description, category_id, brand_id) values ( 1, 'SPB.Телевизор 1', 'Телевизр', 1, 1);
+insert into goods_spb( skud, name, description, category_id, brand_id) values ( 1, 'SPB.Телевизор 2', 'Телевизр', 1, 2);
+insert into goods_spb( skud, name, description, category_id, brand_id) values ( 1, 'SPB.Телевизор 3', 'Телевизр', 1, 3);
+insert into goods_spb( skud, name, description, category_id, brand_id) values ( 1, 'SPB.Сотовый телефон 1', 'Сотовый телефон', 2, 2);
+insert into goods_spb( skud, name, description, category_id, brand_id) values ( 1, 'SPB.Сотовый телефон 2', 'Сотовый телефон', 2, 2);
+
+insert into goods_msk( skud, name, description, category_id, brand_id) values ( 1, 'MSK.Телевизор 1', 'Телевизр', 1, 1);
+insert into goods_msk( skud, name, description, category_id, brand_id) values ( 1, 'MSK.Телевизор 2', 'Телевизр', 1, 2);
+insert into goods_msk( skud, name, description, category_id, brand_id) values ( 1, 'MSK.Телевизор 3', 'Телевизр', 1, 3);
+insert into goods_msk( skud, name, description, category_id, brand_id) values ( 1, 'MSK.Сотовый телефон 1', 'Сотовый телефон', 2, 2);
+insert into goods_msk( skud, name, description, category_id, brand_id) values ( 1, 'MSK.Сотовый телефон 2', 'Сотовый телефон', 2, 2);
+
+insert into goods_oth( skud, name, description, category_id, brand_id) values ( 1, 'ОСТАЛЬНЫЕ.Телевизор 1', 'Телевизр', 1, 1);
+insert into goods_oth( skud, name, description, category_id, brand_id) values ( 1, 'ОСТАЛЬНЫЕ.Телевизор 2', 'Телевизр', 1, 2);
+insert into goods_oth( skud, name, description, category_id, brand_id) values ( 1, 'ОСТАЛЬНЫЕ.Телевизор 3', 'Телевизр', 1, 3);
+insert into goods_oth( skud, name, description, category_id, brand_id) values ( 1, 'ОСТАЛЬНЫЕ.Сотовый телефон 1', 'Сотовый телефон', 2, 2);
+insert into goods_oth( skud, name, description, category_id, brand_id) values ( 1, 'ОСТАЛЬНЫЕ.Сотовый телефон 2', 'Сотовый телефон', 2, 2);
+
+
+--
+-- тип цены
+--
+insert into typeprice(name) values ( 'Обычная цена');
+insert into typeprice(name) values ( 'Корпоративный клиент');
+
+--
+-- цены
+--
+insert into pricelist( datefrom, date_to, price, good_id, typeprice_id, ware_house_id) values ( '2019-01-01', '4019-01-01', 100, 1, 1, 1);
+
+--
+-- методы оплаты
+--
+insert into payment_method( code, name, payment_url) values ( 'YANDEX', 'Яндекс-деньги', 'https://yandex.ru');
+insert into payment_method( code, name, payment_url) values ( 'MIR', 'Мир.Pay', 'https://mir.ru');
+
+--
+-- методы доставки
+--
+insert into delivery_method( code, name) values ( 'POST', 'Почтой');
+insert into delivery_method( code, name) values ( 'COURIER', 'Курьером');
+insert into delivery_method( code, name) values ( 'SELF', 'Самовывоз');
+
+commit;
