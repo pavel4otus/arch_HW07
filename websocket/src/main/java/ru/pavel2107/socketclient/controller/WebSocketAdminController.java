@@ -1,5 +1,7 @@
 package ru.pavel2107.socketclient.controller;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,6 +27,7 @@ import java.util.List;
 
 @RestController
 public class WebSocketAdminController {
+    static final Logger logger = LogManager.getLogger(WebSocketAdminController.class);
 
     private ConversationService conversationService;
     private SimpMessagingTemplate messagingTemplate;
@@ -38,18 +41,21 @@ public class WebSocketAdminController {
     @GetMapping(value = "/microservices/v1/admin/chat/all_sessions", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Conversation> getSessions() {
         List<Conversation> list = conversationService.findAll();
+        logger.info( "CHAT. GET_SESSIONS: {} ", list.size());
         return list;
     }
 
     @GetMapping(value = "/microservices/v1/admin/chat/avail_sessions", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Conversation> getAvailableSessions() {
         List<Conversation> list = conversationService.findAvailable();
+        logger.info( "CHAT. GET_AVAIL_SESSIONS: {} ", list.size());
         return list;
     }
 
     @PutMapping(value = "/microservices/v1/admin/chat/sendmessage")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void produceMessageFromOperator(Principal principal, @RequestParam String sessionId, @RequestParam String message) throws Exception {
+        logger.info( "CHAT. SEND. OPER: {} ", principal.getName());
         System.out.println("sessionId: " + sessionId);
         System.out.println("message  : " + message);
         //

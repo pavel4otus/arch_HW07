@@ -18,7 +18,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQL9Dialect
-                 
+
 server:
   port: 8084
 
@@ -30,13 +30,13 @@ management:
   endpoint:
     metrics:
       enabled: true
-    prometheus: enabled    
+    prometheus: enabled
     shutdown:
       enabled: true
   metrics:
     export:
       prometheus:
-        enabled: true 
+        enabled: true
 
 app:
   jwt:

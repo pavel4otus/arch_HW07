@@ -1,6 +1,6 @@
 package ru.pavel2107.arch.register.condig;
 
-import  org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

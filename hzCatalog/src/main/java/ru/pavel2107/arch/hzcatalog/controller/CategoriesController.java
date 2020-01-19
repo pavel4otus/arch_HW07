@@ -2,9 +2,12 @@ package ru.pavel2107.arch.hzcatalog.controller;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -22,43 +25,50 @@ import java.security.Principal;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import static ru.pavel2107.arch.hzcatalog.Utils.serviceUrl;
+
 @RestController
-public class CategoriesController  {
+public class CategoriesController {
+    static final Logger logger = LogManager.getLogger(CategoriesController.class);
 
     private RestTemplate restTemplate;
     private HazelcastInstance hazelcastInstance;
+    private DiscoveryClient discoveryClient;
 
-    @Value("${app.categories.url}")
+    // @Value("${app.categories.url}")
     private String url;
 
     @Value("${app.categories.ttl}")
     private Integer ttl;
 
     @Autowired
-    public CategoriesController(RestTemplate restTemplate, @Qualifier("hazelcastInstance") HazelcastInstance hazelcastInstance) {
+    public CategoriesController(RestTemplate restTemplate, @Qualifier("hazelcastInstance") HazelcastInstance hazelcastInstance, DiscoveryClient discoveryClient) {
         this.restTemplate = restTemplate;
         this.hazelcastInstance = hazelcastInstance;
+        this.discoveryClient = discoveryClient;
+        this.url = serviceUrl( discoveryClient, Utils.CATALOG_APP_NAME) + "/microservices/v2/catalog/categories";
     }
 
     @GetMapping(value = "/microservices/v3/catalog/categories", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List <Category> getCategories() {
+    public List<Category> getCategories() {
         IMap<Long, Category> map = hazelcastInstance.getMap("categories");
         List<Category> list = new ArrayList<>();
+        String cashed = "";
         if (map.entrySet().size() == 0) {
-            System.out.println( "Кеш пуст. делаем запрос к основному серверу");
+            cashed = "N";
             HttpEntity<String> entity = Utils.initEntity("", "");
-            ResponseEntity<List<Category>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, new ParameterizedTypeReference<List<Category>>() {});
+            ResponseEntity<List<Category>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, new ParameterizedTypeReference<List<Category>>() {
+            });
             list = responseEntity.getBody();
-            System.out.println( "Получен ответ от основного сервера. count=" + list.size());
             for (Category category : list) {
                 map.put(category.getId(), category, ttl, TimeUnit.SECONDS);
             }
         } else {
-            System.out.println( "Получаем значения из кеша");
+            cashed = "Y";
             Collection<Category> collection = map.values();
-            list = new ArrayList<>( collection);
-            System.out.println( "Получен ответ из кеша. count=" + list.size());
+            list = new ArrayList<>(collection);
         }
+        logger.info( "CATEGORIES. CASHED: {} RETURNED: {}", cashed, list.size());
 
         return list;
     }

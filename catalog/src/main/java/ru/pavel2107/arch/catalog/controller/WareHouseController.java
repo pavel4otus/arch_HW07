@@ -1,5 +1,7 @@
 package ru.pavel2107.arch.catalog.controller;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,6 +13,7 @@ import java.util.List;
 
 @RestController
 public class WareHouseController {
+    static final Logger logger = LogManager.getLogger(WareHouseController.class);
 
     private WareHouseService service;
 
@@ -19,8 +22,9 @@ public class WareHouseController {
         this.service = service;
     }
 
-    @GetMapping(value = "/microservices/v1/catalog/warehouses", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/microservices/v2/catalog/warehouses", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<WareHouse> wareHouseList() {
+        logger.info( "WAREHOUSES. Список складов");
         List<WareHouse> list = service.findAll();
         return list;
     }

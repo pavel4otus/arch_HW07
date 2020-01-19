@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User registerNewUser(User user) throws Exception {
         user.setRole("ROLE_USER");
-        user.setPassword( passwordEncoder.encode( user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user = repository.save(user);
         return user;
     }

@@ -44,10 +44,10 @@ scrape_configs:
     static_configs:
       - targets: ['websocket:8088']
 
-#  - job_name: 'config'
-#    metrics_path: '/actuator/prometheus'
-#    static_configs:
-#      - targets: ['config:7777']
+  #  - job_name: 'config'
+  #    metrics_path: '/actuator/prometheus'
+  #    static_configs:
+  #      - targets: ['config:7777']
 
   - job_name: 'hzcatalog'
     metrics_path: '/actuator/prometheus'

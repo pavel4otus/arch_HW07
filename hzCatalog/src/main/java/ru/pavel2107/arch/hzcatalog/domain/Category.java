@@ -8,7 +8,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 public class Category extends CommonTypeWithId implements Serializable {
-   private String name;
+    private String name;
     String code;
 
     //@OneToMany( mappedBy = "category", fetch = FetchType.LAZY)

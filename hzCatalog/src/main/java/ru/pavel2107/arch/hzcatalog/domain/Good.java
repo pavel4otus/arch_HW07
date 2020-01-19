@@ -2,6 +2,7 @@ package ru.pavel2107.arch.hzcatalog.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,7 +25,7 @@ public class Good {
     private Long brand;
 
 
-//    @ManyToMany(cascade = {CascadeType.ALL})
+    //    @ManyToMany(cascade = {CascadeType.ALL})
 //    @JoinTable(
 //            name = "goods_on_warehouses",
 //            joinColumns = {@JoinColumn(name = "good_id")},

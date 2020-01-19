@@ -29,8 +29,8 @@ public class ConfigServerApplication {
         return new WebSecurityConfigurerAdapter() {
 
             @Override
-            public void configure(WebSecurity webSecurity){
-                webSecurity.ignoring().antMatchers( "/actuator/health");
+            public void configure(WebSecurity webSecurity) {
+                webSecurity.ignoring().antMatchers("/actuator/health");
             }
 
 
@@ -44,7 +44,7 @@ public class ConfigServerApplication {
 
                 httpSecurity.authorizeRequests()
                         .antMatchers("**/decrypt/**")
-                 .authenticated().and().csrf().disable();
+                        .authenticated().and().csrf().disable();
 
 
             }

@@ -6,7 +6,7 @@ spring:
       force: true
 
   application:
-    name: goods
+    name: authentication
 
   datasource:
     url: jdbc:postgresql://postgres:5432/eshop
@@ -31,13 +31,13 @@ management:
   endpoint:
     metrics:
       enabled: true
-    prometheus: enabled    
+    prometheus: enabled
     shutdown:
       enabled: true
   metrics:
     export:
       prometheus:
-        enabled: true 
+        enabled: true
 
 server:
   port: 9999

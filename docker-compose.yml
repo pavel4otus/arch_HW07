@@ -1,262 +1,262 @@
 version: '3'
 services:
 
-    postgres:
-       container_name: postgres
-       networks:
-         - app
-       image: postgres:12
-       restart: on-failure
-       ports:
-         - 65432:5432
-       volumes:
-         - ./pgdata:/var/lib.postgresql/data
-       environment:
-         - POSTGRES_USER=postgres
-         - POSTGRES_PASSWORD=postgres
-         - POSTGRES_DB=eshop
+  postgres:
+    container_name: postgres
+    networks:
+      - app
+    image: postgres:12
+    restart: on-failure
+    ports:
+      - 65432:5432
+    volumes:
+      - ./pgdata:/var/lib.postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=eshop
 
-    rabbit:
-       container_name: rabbit
-       networks:
-         - app
-       image: rabbitmq:3.8-rc-management
-       restart: on-failure
-       ports:
-         - 5672:5672
-         - 15672:15672
-       volumes:
-         - ./rabbit:/var/lib/rabbitmq/mnesia/
+  rabbit:
+    container_name: rabbit
+    networks:
+      - app
+    image: rabbitmq:3.8-rc-management
+    restart: on-failure
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ./rabbit:/var/lib/rabbitmq/mnesia/
 
-    mongodb:
-       container_name: mongodb
-       networks:
-         - app
-       image: mongo:3.4
-       restart: on-failure
-       ports:
-         - 27017:27017
-       volumes:
-         - ./mongo:/data
+  mongodb:
+    container_name: mongodb
+    networks:
+      - app
+    image: mongo:3.4
+    restart: on-failure
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongo:/data
 
-    hazelcast:
-       container_name: hazelcast
-       image: hazelcast/hazelcast:3.12.5
-       networks:
-         - app
-       restart: on-failure
-       ports:
-         - 5701:5701
+  hazelcast:
+    container_name: hazelcast
+    image: hazelcast/hazelcast:3.12.5
+    networks:
+      - app
+    restart: on-failure
+    ports:
+      - 5701:5701
 
-    prometheus:
-       container_name: prometheus
-       image: prom/prometheus:v2.15.2
-       networks:
-         - app
-       restart: on-failure
-       ports:
-         - 9090:9090
-       volumes:
-         - ./otus.configurations/prometheus.yml:/etc/prometheus/prometheus.yml
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:v2.15.2
+    networks:
+      - app
+    restart: on-failure
+    ports:
+      - 9090:9090
+    volumes:
+      - ./otus.configurations/prometheus.yml:/etc/prometheus/prometheus.yml
 
-    grafana:
-       container_name: grafana
-       image: grafana/grafana:6.5.3
-       networks:
-         - app
-       ports:
-         - 3000:3000
-       depends_on:
-         - prometheus
-       environment:
-         - GF_SECURITY_ADMIN_PASSWORD=12345
-       volumes:
-         - ./grafana/provisioning:/etc/grafana/provisioning
-         - ./grafana/dashboards:/var/lib/grafana/dashboards
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:6.5.3
+    networks:
+      - app
+    ports:
+      - 3000:3000
+    depends_on:
+      - prometheus
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=12345
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
 
-    config:
-       container_name: config
-       restart: on-failure
-       networks:
-         - app
-       ports:
-         - 7777:7777
-       build:
-         context: .
-         dockerfile: Dockerfile.config
-       depends_on:
-         - postgres
-       volumes:
-         - ./config.configuration:/config.configuration
-         - ./otus.configurations:/otus.configurations
+  config:
+    container_name: config
+    restart: on-failure
+    networks:
+      - app
+    ports:
+      - 7777:7777
+    build:
+      context: .
+      dockerfile: Dockerfile.config
+    depends_on:
+      - postgres
+    volumes:
+      - ./config.configuration:/config.configuration
+      - ./otus.configurations:/otus.configurations
 
-    createschema:
-       container_name: createschema
-       networks:
-         - app
-       restart: on-failure
-       build:
-         context: .
-         dockerfile: Dockerfile.createschema
-       depends_on:
-         - postgres
-         - config
-       entrypoint: [ "./wait_it.sh", "http://config:7777/actuator/health", "20", "5" ]
-       command:    [ "java", "-jar", "createschema.jar" ]
+  createschema:
+    container_name: createschema
+    networks:
+      - app
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: Dockerfile.createschema
+    depends_on:
+      - postgres
+      - config
+    entrypoint: [ "./wait_it.sh", "http://config:7777/actuator/health", "20", "5" ]
+    command:    [ "java", "-jar", "createschema.jar" ]
 
-    registration:
-       container_name: registration
-       networks:
-         - app
-       restart: on-failure
-       ports:
-         - 8085:8085
-       build:
-         context: .
-         dockerfile: Dockerfile.registration
-       depends_on:
-         - postgres
-         - rabbit
-         - config
-         - createschema
-       entrypoint: [ "./wait_it.sh", "http://config:7777/actuator/health", "20", "5" ]
-       command:    [ "java", "-jar", "registration.jar" ]
+  registration:
+    container_name: registration
+    networks:
+      - app
+    restart: on-failure
+    ports:
+      - 8085:8085
+    build:
+      context: .
+      dockerfile: Dockerfile.registration
+    depends_on:
+      - postgres
+      - rabbit
+      - config
+      - createschema
+    entrypoint: [ "./wait_it.sh", "http://config:7777/actuator/health", "20", "5" ]
+    command:    [ "java", "-jar", "registration.jar" ]
 
-    notification:
-       container_name: notification
-       networks:
-         - app
-       restart: on-failure
-       ports:
-         - 8086:8086
-       build:
-         context: .
-         dockerfile: Dockerfile.notification
-       depends_on:
-         - postgres
-         - config
-         - createschema
-         - rabbit
-       entrypoint: [ "./wait_it.sh", "http://config:7777/actuator/health", "20", "5" ]
-       command:    [ "java", "-jar", "notification.jar" ]
+  notification:
+    container_name: notification
+    networks:
+      - app
+    restart: on-failure
+    ports:
+      - 8086:8086
+    build:
+      context: .
+      dockerfile: Dockerfile.notification
+    depends_on:
+      - postgres
+      - config
+      - createschema
+      - rabbit
+    entrypoint: [ "./wait_it.sh", "http://config:7777/actuator/health", "20", "5" ]
+    command:    [ "java", "-jar", "notification.jar" ]
 
-    authentication:
-       container_name: authentication
-       networks:
-         - app
-       restart: on-failure
-       ports:
-         - 9999:9999
-       build:
-         context: .
-         dockerfile: Dockerfile.authentication
-       depends_on:
-         - postgres
-         - config
-         - createschema
-       entrypoint: [ "./wait_it.sh", "http://config:7777/actuator/health", "20", "5" ]
-       command:    [ "java", "-jar", "authentication.jar" ]
+  authentication:
+    container_name: authentication
+    networks:
+      - app
+    restart: on-failure
+    ports:
+      - 9999:9999
+    build:
+      context: .
+      dockerfile: Dockerfile.authentication
+    depends_on:
+      - postgres
+      - config
+      - createschema
+    entrypoint: [ "./wait_it.sh", "http://config:7777/actuator/health", "20", "5" ]
+    command:    [ "java", "-jar", "authentication.jar" ]
 
-    admin:
-       container_name: admin
-       networks:
-         - app
-       restart: on-failure
-       ports:
-         - 8081:8081
-       build:
-         context: .
-         dockerfile: Dockerfile.admin
-       depends_on:
-         - postgres
-         - config
-         - createschema
-       entrypoint: [ "./wait_it.sh", "http://config:7777/actuator/health", "20", "5" ]
-       command:    [ "java", "-jar", "admin.jar" ]
+  admin:
+    container_name: admin
+    networks:
+      - app
+    restart: on-failure
+    ports:
+      - 8081:8081
+    build:
+      context: .
+      dockerfile: Dockerfile.admin
+    depends_on:
+      - postgres
+      - config
+      - createschema
+    entrypoint: [ "./wait_it.sh", "http://config:7777/actuator/health", "20", "5" ]
+    command:    [ "java", "-jar", "admin.jar" ]
 
-    basket:
-       container_name: basket
-       networks:
-         - app
-       restart: on-failure
-       ports:
-         - 8083:8083
-       build:
-         context: .
-         dockerfile: Dockerfile.basket
-       depends_on:
-         - postgres
-         - config
-         - createschema
-       entrypoint: [ "./wait_it.sh", "http://config:7777/actuator/health", "20", "5" ]
-       command:    [ "java", "-jar", "basket.jar" ]
+  basket:
+    container_name: basket
+    networks:
+      - app
+    restart: on-failure
+    ports:
+      - 8083:8083
+    build:
+      context: .
+      dockerfile: Dockerfile.basket
+    depends_on:
+      - postgres
+      - config
+      - createschema
+    entrypoint: [ "./wait_it.sh", "http://config:7777/actuator/health", "20", "5" ]
+    command:    [ "java", "-jar", "basket.jar" ]
 
-    catalog:
-       container_name: catalog
-       networks:
-         - app
-       restart: on-failure
-       ports:
-         - 8082:8082
-       build:
-         context: .
-         dockerfile: Dockerfile.catalog
-       depends_on:
-         - postgres
-         - config
-         - createschema
-       entrypoint: [ "./wait_it.sh", "http://config:7777/actuator/health", "20", "5" ]
-       command:    [ "java", "-jar", "catalog.jar" ]
+  catalog:
+    container_name: catalog
+    networks:
+      - app
+    restart: on-failure
+    ports:
+      - 8082:8082
+    build:
+      context: .
+      dockerfile: Dockerfile.catalog
+    depends_on:
+      - postgres
+      - config
+      - createschema
+    entrypoint: [ "./wait_it.sh", "http://config:7777/actuator/health", "20", "5" ]
+    command:    [ "java", "-jar", "catalog.jar" ]
 
-    order:
-       container_name: order
-       networks:
-         - app
-       restart: on-failure
-       ports:
-         - 8084:8084
-       build:
-         context: .
-         dockerfile: Dockerfile.order
-       depends_on:
-         - postgres
-         - config
-         - createschema
-       entrypoint: [ "./wait_it.sh", "http://config:7777/actuator/health", "20", "5" ]
-       command:    [ "java", "-jar", "order.jar" ]
+  order:
+    container_name: order
+    networks:
+      - app
+    restart: on-failure
+    ports:
+      - 8084:8084
+    build:
+      context: .
+      dockerfile: Dockerfile.order
+    depends_on:
+      - postgres
+      - config
+      - createschema
+    entrypoint: [ "./wait_it.sh", "http://config:7777/actuator/health", "20", "5" ]
+    command:    [ "java", "-jar", "order.jar" ]
 
-    websocket:
-       container_name: websocket
-       networks:
-         - app
-       restart: on-failure
-       ports:
-         - 8088:8088
-       build:
-         context: .
-         dockerfile: Dockerfile.websocket
-       depends_on:
-         - mongodb
-         - config
-       entrypoint: [ "./wait_it.sh", "http://config:7777/actuator/health", "20", "5" ]
-       command:    [ "java", "-jar", "websocket.jar" ]
+  websocket:
+    container_name: websocket
+    networks:
+      - app
+    restart: on-failure
+    ports:
+      - 8088:8088
+    build:
+      context: .
+      dockerfile: Dockerfile.websocket
+    depends_on:
+      - mongodb
+      - config
+    entrypoint: [ "./wait_it.sh", "http://config:7777/actuator/health", "20", "5" ]
+    command:    [ "java", "-jar", "websocket.jar" ]
 
-    hzcatalog:
-       container_name: hzcatalog
-       networks:
-         - app
-       restart: on-failure
-       ports:
-         - 8090:8090
-       build:
-         context: .
-         dockerfile: Dockerfile.hzcatalog
-       depends_on:
-         - authentication
-         - config
-         - hazelcast
-       entrypoint: [ "./wait_it.sh", "http://catalog:8082/actuator/health", "20", "5" ]
-       command:    [ "java", "-jar", "hzcatalog.jar" ]
+  hzcatalog:
+    container_name: hzcatalog
+    networks:
+      - app
+    restart: on-failure
+    ports:
+      - 8090:8090
+    build:
+      context: .
+      dockerfile: Dockerfile.hzcatalog
+    depends_on:
+      - authentication
+      - config
+      - hazelcast
+    entrypoint: [ "./wait_it.sh", "http://catalog:8082/actuator/health", "20", "5" ]
+    command:    [ "java", "-jar", "hzcatalog.jar" ]
 
 
 networks:

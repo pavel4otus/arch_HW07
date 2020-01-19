@@ -1,5 +1,7 @@
 package ru.pavel2107.socketclient.controller;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.*;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 
 @Controller
 public class WebSocketClientController {
+    static final Logger logger = LogManager.getLogger(WebSocketClientController.class);
 
     private ConversationService conversationService;
 
@@ -34,6 +37,7 @@ public class WebSocketClientController {
 
     @MessageMapping("/hello")
     public InputMessage processMessageFromClient(Principal principal, @Payload InputMessage message, SimpMessageHeaderAccessor headerAccessor) throws Exception {
+        logger.info( "CHAT. SEND. USER: {} ", principal.getName());
         System.out.println(message);
         String sessionId = (String) headerAccessor.getSessionAttributes().get("sessionId");
         String username = message.getFrom();
@@ -105,60 +109,10 @@ public class WebSocketClientController {
         return message;
     }
 
-
-    @MessageMapping("/hello2")
-    public InputMessage old_processMessageFromClient(Principal principal, @Payload InputMessage message, SimpMessageHeaderAccessor headerAccessor) throws Exception {
-        System.out.println(message);
-        String sessionId = (String) headerAccessor.getSessionAttributes().get("sessionId");
-        String username = message.getFrom();
-        System.out.println("sessionId:" + sessionId);
-        System.out.println("getSubscriptionId:" + headerAccessor.getSubscriptionId());
-
-        String user = headerAccessor.getFirstNativeHeader("unique-user");
-        System.out.println("user from accessor is" + user);
-
-
-        //
-        // запоминаем сообщение
-        //
-        ChatMessage chatMessage = new ChatMessage(message.getText(), LocalDateTime.now(), true);
-        //
-        // ищем беседу с оператором. Если не нашли, вносим в список ожидания
-        //
-        Conversation conversation = conversationService.findBySessionId(sessionId);
-        if (conversation.getSessionId() == null) {
-            conversation.setSessionId(sessionId);
-            conversation.setUsername(username);
-            conversation.setCreated(LocalDateTime.now());
-            conversation.setMessages(new ArrayList<>());
-            conversation.setUserUniqueName(principal.getName());
-            //
-            // сообщаем клиенту его уникальное имя
-            //
-            message.setSessionId(sessionId);
-            message.setToUniqueName("");
-        }
-        conversation.getMessages().add(chatMessage);
-        conversationService.save(conversation);
-        System.out.println("principal=" + principal.getName() + " -> " + message.getFrom());
-        //messagingTemplate.convertAndSendToUser(message.getFrom(), "/queue/reply", message);
-        //
-        // отправляем сообщение себе, чтобы удостовериться в жизнеспособности сервера
-        //
-        messagingTemplate.convertAndSendToUser(principal.getName(), "/queue/reply", message);
-        //
-        // отправляем сообщение получателю, если он есть конечно
-        //
-        if (!StringUtils.isEmpty(message.getToUniqueName())) {
-            messagingTemplate.convertAndSendToUser(message.getToUniqueName(), "/queue/reply", message);
-        }
-        return message;
-    }
-
-
     @MessageExceptionHandler
     @SendToUser("/queue/errors")
     public String handleException(Throwable exception) {
+        logger.info( "CHAT. ERROR: {} ", exception);
         return exception.getMessage();
     }
 }

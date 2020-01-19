@@ -1,5 +1,7 @@
 package ru.pavel2107.arch.admin.controller;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,6 +17,7 @@ import java.util.List;
 
 @RestController
 public class BrandController {
+    static final Logger logger = LogManager.getLogger(BrandController.class);
 
     private BrandService brandService;
 
@@ -25,6 +28,7 @@ public class BrandController {
 
     @GetMapping(value = "microservices/v1/admin/brands", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Brand> listBrands() {
+        logger.info( "BRANDS. Список брендов");
         List<Brand> list = brandService.findAll();
         return list;
     }
@@ -32,11 +36,13 @@ public class BrandController {
     @DeleteMapping(value = "microservices/v1/admin/brands", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@RequestParam(value = "id") Long id) {
+        logger.info( "BRANDS. DELETE: {}", id);
         brandService.delete(id);
     }
 
     @PostMapping(value = "microservices/v1/admin/brands", produces = MediaType.APPLICATION_JSON_VALUE)
     public Brand save(@RequestBody Brand brand) {
+        logger.info( "BRANDS. SAVE: {}", brand.getCode());
         Brand b = brandService.save(brand);
         return b;
     }

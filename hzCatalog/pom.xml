@@ -20,6 +20,7 @@
         <spring-security-oauth2.version>2.3.5.RELEASE</spring-security-oauth2.version>
         <spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
         <hazelcast.jet.version>0.6</hazelcast.jet.version>
+        <spring-cloud.version>Hoxton.SR1</spring-cloud.version>
     </properties>
 
 
@@ -37,6 +38,11 @@
             <version>2.9.2</version>
         </dependency>
 
+        <!-- Eureka client -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
 
         <!-- Micormeter core dependecy  -->
         <dependency>
@@ -49,6 +55,13 @@
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>2.13.0</version>
+            <type>pom</type>
+        </dependency>
 
         <!-- Spring Security OAuth2 and JWT -->
         <dependency>
@@ -64,14 +77,6 @@
         </dependency>
 
 
-        <!-- Hazelcast Client -->
-        <!--
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-client</artifactId>
-            <version>3.7.2</version>
-        </dependency>
--->
         <!-- Hazelcast Jet -->
         <dependency>
             <groupId>com.hazelcast.jet</groupId>
@@ -108,6 +113,17 @@
         </dependency>
     </dependencies>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>

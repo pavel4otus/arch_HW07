@@ -20,17 +20,17 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void send(Map<String, String> properties) {
-        String destination = (String) properties.get("destination");
+        String destination = properties.get("destination");
         switch (destination) {
             case "push":
-                String phone = (String) properties.get("phone");
-                String message = (String) properties.get("message");
+                String phone   = properties.get("phone");
+                String message = properties.get("message");
                 pushService.push(phone, message);
                 break;
             case "email":
-                String to = (String) properties.get("to");
-                String subject = (String) properties.get("subject");
-                String text = (String) properties.get("text");
+                String to      = properties.get("to");
+                String subject = properties.get("subject");
+                String text    = properties.get("text");
                 emailService.send(to, subject, text);
                 break;
         }

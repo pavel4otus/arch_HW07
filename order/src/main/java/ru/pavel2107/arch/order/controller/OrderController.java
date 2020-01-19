@@ -1,5 +1,7 @@
 package ru.pavel2107.arch.order.controller;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +22,7 @@ import java.util.Optional;
 
 @RestController
 public class OrderController {
+    static final Logger logger = LogManager.getLogger(OrderController.class);
 
     private OrderRepo orderRepository;
     private UserRepo userRepository;
@@ -37,6 +40,7 @@ public class OrderController {
 
     @PostMapping(value = "/microservices/v1/order/setaddress")
     public OrderDto setAddress(Principal principal, @RequestParam String address) {
+        logger.info( "ORDER. USER: {} SET: ADDRESS", principal.getName());
         User user = userRepository.findByEmail(principal.getName());
         Order basket = orderRepository.findByUserAndHistory_Empty(user);
         basket.setDeliveryAddress(address);
@@ -46,6 +50,7 @@ public class OrderController {
 
     @PostMapping(value = "/microservices/v1/order/setpaymentmethod")
     public OrderDto setPaymentMethod(Principal principal, @RequestParam Long paymentMethodId) {
+        logger.info( "ORDER. USER: {} SET: PAYMETHOD {}", principal.getName(), paymentMethodId);
         User user = userRepository.findByEmail(principal.getName());
         Order basket = orderRepository.findByUserAndHistory_Empty(user);
         Optional<PaymentMethod> paymentMethod = paymentMethodRepo.findById(paymentMethodId);
@@ -58,6 +63,7 @@ public class OrderController {
 
     @PostMapping(value = "/microservices/v1/order/setdeliverymethod")
     public OrderDto setDeliveryMethod(Principal principal, @RequestParam Long deliveryMethodId) {
+        logger.info( "ORDER. USER: {} SET: DELMETHOD {}", principal.getName(), deliveryMethodId);
         User user = userRepository.findByEmail(principal.getName());
         Order basket = orderRepository.findByUserAndHistory_Empty(user);
         Optional<DeliveryMethod> deliveryMethod = deliveryMethodRepo.findById(deliveryMethodId);
@@ -67,6 +73,4 @@ public class OrderController {
         basket = orderRepository.save(basket);
         return Utils.toDto(basket);
     }
-
-
 }

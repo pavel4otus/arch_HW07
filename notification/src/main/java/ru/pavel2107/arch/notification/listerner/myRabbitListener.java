@@ -21,26 +21,25 @@ public class myRabbitListener {
     }
 
 
-
     @RabbitListener(queues = RabbitConfig.REGISTRATION_QUEUE)
     public void listen(UserRegistration registration) {
         System.out.println("Notification. command from registration : " + registration.getCommand());
         System.out.println("Notification. user : " + registration.getUser());
         Map<String, String> map = new HashMap<>();
-        map.put( "destination", "email");
-        map.put( "to", registration.getUser().getEmail());
-        map.put( "to", "paveltseitlin@mail.ru");
-        switch ( registration.getCommand()) {
+        map.put("destination", "email");
+        map.put("to", registration.getUser().getEmail());
+        map.put("to", "paveltseitlin@mail.ru");
+        switch (registration.getCommand()) {
             case "registered":
-                map.put( "subject", "Поздравляем с регистрацией");
-                map.put( "text", "Позитив " + registration.getUser().getFio() + "" );
+                map.put("subject", "Поздравляем с регистрацией");
+                map.put("text", "Позитив " + registration.getUser().getFio() + "");
                 break;
             case "updated":
-                map.put( "subject", "Профиль обновлен");
-                map.put( "text", "<HTML><body>Ваш профиль обновлен " + registration.getUser().getFio() + "</body></HTML>" );
+                map.put("subject", "Профиль обновлен");
+                map.put("text", "<HTML><body>Ваш профиль обновлен " + registration.getUser().getFio() + "</body></HTML>");
                 break;
         }
-        notificationService.send( map);
+        notificationService.send(map);
     }
 
 }

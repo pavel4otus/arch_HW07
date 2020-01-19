@@ -1,5 +1,7 @@
 package ru.pavel2107.arch.basket.controller;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,10 +23,11 @@ import java.util.List;
 
 @RestController
 public class BasketController {
+    static final Logger logger = LogManager.getLogger(BasketController.class);
+
     private BasketService basketService;
     private UserService userService;
     private GoodsService goodsService;
-
 
     @Autowired
     public BasketController(BasketService basketService, UserService userService, GoodsService goodsService) {
@@ -37,7 +40,7 @@ public class BasketController {
     public OrderDto get(Principal principal) {
         User user = findUser(principal);
         Order basket = basketService.findBasket(user);
-        OrderDto dto = Utils.toDto( basket);
+        OrderDto dto = Utils.toDto(basket);
         return dto;
     }
 

@@ -1,5 +1,7 @@
 package ru.pavel2107.arch.admin.controller;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,6 +18,8 @@ import java.util.List;
 @RestController
 public class CategoryController {
 
+    static final Logger logger = LogManager.getLogger(CategoryController.class);
+
     private CategoryService categoryService;
 
     @Autowired
@@ -25,6 +29,7 @@ public class CategoryController {
 
     @GetMapping(value = "microservices/v1/admin/categories", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Category> listcategories(Authentication auth) {
+        logger.info( "CATEGORIES. список категорий");
         List<Category> list = categoryService.findAll();
         return list;
     }
@@ -32,11 +37,13 @@ public class CategoryController {
     @DeleteMapping(value = "microservices/v1/admin/categories", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@RequestParam(value = "id") Long id) {
+        logger.info( "CATEGORIES. DELETE: {}", id);
         categoryService.delete(id);
     }
 
     @PostMapping(value = "microservices/v1/admin/categories", produces = MediaType.APPLICATION_JSON_VALUE)
     public Category save(@RequestBody Category category) {
+        logger.info( "CATEGORIES. SAVE: {}", category.getCode());
         return categoryService.save(category);
     }
 }

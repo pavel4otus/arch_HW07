@@ -24,10 +24,10 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQL9Dialect
 
   rabbitmq:
-      host: rabbit
-      username: guest # Login user to authenticate to the broker.
-      password: guest # Login to authenticate against the broker.
-      port: 5672 # RabbitMQ port.
+    host: rabbit
+    username: guest # Login user to authenticate to the broker.
+    password: guest # Login to authenticate against the broker.
+    port: 5672 # RabbitMQ port.
 
 
   mail:
@@ -53,13 +53,13 @@ management:
   endpoint:
     metrics:
       enabled: true
-    prometheus: enabled    
+    prometheus: enabled
     shutdown:
       enabled: true
   metrics:
     export:
       prometheus:
-        enabled: true 
+        enabled: true
 
 app:
   push:

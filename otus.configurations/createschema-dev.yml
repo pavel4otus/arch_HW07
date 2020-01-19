@@ -34,7 +34,7 @@ management:
   endpoint:
     metrics:
       enabled: true
-    prometheus: enabled    
+    prometheus: enabled
     shutdown:
       enabled: true
   metrics:

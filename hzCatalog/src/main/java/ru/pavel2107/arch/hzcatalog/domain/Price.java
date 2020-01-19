@@ -2,6 +2,7 @@ package ru.pavel2107.arch.hzcatalog.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
 @Data

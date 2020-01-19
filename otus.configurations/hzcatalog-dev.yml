@@ -20,13 +20,13 @@ management:
   endpoint:
     metrics:
       enabled: true
-    prometheus: enabled    
+    prometheus: enabled
     shutdown:
       enabled: true
   metrics:
     export:
       prometheus:
-        enabled: true 
+        enabled: true
 
 app:
   jwt:
@@ -36,14 +36,14 @@ app:
     username: dev
     password: dev-pass
   brands:
-    url: http://catalog:8082/microservices/v1/catalog/brands
+#    url: http://catalog:8082/microservices/v1/catalog/brands
     ttl: 60
   categories:
-    url: http://catalog:8082/microservices/v1/catalog/categories
+#    url: http://catalog:8082/microservices/v1/catalog/categories
     ttl: 60
   warehouses:
-    url: http://catalog:8082/microservices/v1/catalog/warehouses
+#    url: http://catalog:8082/microservices/v1/catalog/warehouses
     ttl: 5
   catalog:
-    url: http://catalog:8082/microservices/v2/catalog
+#    url: http://catalog:8082/microservices/v2/catalog
     ttl: 30

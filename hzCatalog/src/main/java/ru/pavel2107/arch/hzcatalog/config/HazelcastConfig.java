@@ -18,35 +18,35 @@ import java.util.ArrayList;
 @Configuration
 public class HazelcastConfig {
 
-    @Value( "${app.hazelcast.server}")
+    @Value("${app.hazelcast.server}")
     private String hzServer;
 
-    @Value( "${app.hazelcast.username}")
+    @Value("${app.hazelcast.username}")
     private String hzUserName;
 
-    @Value( "${app.hazelcast.password}")
+    @Value("${app.hazelcast.password}")
     private String hzPassword;
 
     @Bean
-    public ClientConfig clientConfig(){
+    public ClientConfig clientConfig() {
         ClientConfig config = new ClientConfig();
         ClientNetworkConfig clientNetworkConfig = new ClientNetworkConfig();
-        for( String address : hzServer.split( ",")){
-            clientNetworkConfig.addAddress( address);
+        for (String address : hzServer.split(",")) {
+            clientNetworkConfig.addAddress(address);
         }
 
         GroupConfig groupConfig = config.getGroupConfig();
-        groupConfig.setName( hzUserName);
-        groupConfig.setPassword( hzPassword);
-        config.setNetworkConfig( clientNetworkConfig);
+        groupConfig.setName(hzUserName);
+        groupConfig.setPassword(hzPassword);
+        config.setNetworkConfig(clientNetworkConfig);
         config.setClassLoader(Thread.currentThread().getContextClassLoader());
 
         return config;
     }
 
     @Bean
-    public HazelcastInstance hazelcastInstance( ClientConfig config){
-        HazelcastInstance hazelcastInstanceClient = HazelcastClient.newHazelcastClient( config);
+    public HazelcastInstance hazelcastInstance(ClientConfig config) {
+        HazelcastInstance hazelcastInstanceClient = HazelcastClient.newHazelcastClient(config);
         return hazelcastInstanceClient;
     }
 

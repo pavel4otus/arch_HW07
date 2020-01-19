@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS delivery_method
     primary key (id)
 );
 
-CREATE TABLE IF NOT EXISTS  goods
+CREATE TABLE IF NOT EXISTS goods
 (
     id              bigserial not null,
     description     varchar(255),
@@ -134,32 +134,7 @@ CREATE TABLE IF NOT EXISTS  goods
     category_id     int8,
     primary key (id)
 );
-CREATE TABLE IF NOT EXISTS  goods_spb
-(
-    id              bigserial not null,
-    description     varchar(255),
-    largepictureurl varchar(255),
-    name            varchar(255),
-    skud            int8,
-    smallpictureurl varchar(255),
-    brand_id        int8,
-    category_id     int8,
-    primary key (id)
-);
-
-CREATE TABLE IF NOT EXISTS  goods_msk
-(
-    id              bigserial not null,
-    description     varchar(255),
-    largepictureurl varchar(255),
-    name            varchar(255),
-    skud            int8,
-    smallpictureurl varchar(255),
-    brand_id        int8,
-    category_id     int8,
-    primary key (id)
-);
-CREATE TABLE IF NOT EXISTS  goods_oth
+CREATE TABLE IF NOT EXISTS goods_spb
 (
     id              bigserial not null,
     description     varchar(255),
@@ -172,7 +147,32 @@ CREATE TABLE IF NOT EXISTS  goods_oth
     primary key (id)
 );
 
-CREATE TABLE IF NOT EXISTS  goods_on_warehouses
+CREATE TABLE IF NOT EXISTS goods_msk
+(
+    id              bigserial not null,
+    description     varchar(255),
+    largepictureurl varchar(255),
+    name            varchar(255),
+    skud            int8,
+    smallpictureurl varchar(255),
+    brand_id        int8,
+    category_id     int8,
+    primary key (id)
+);
+CREATE TABLE IF NOT EXISTS goods_oth
+(
+    id              bigserial not null,
+    description     varchar(255),
+    largepictureurl varchar(255),
+    name            varchar(255),
+    skud            int8,
+    smallpictureurl varchar(255),
+    brand_id        int8,
+    category_id     int8,
+    primary key (id)
+);
+
+CREATE TABLE IF NOT EXISTS goods_on_warehouses
 (
     id           int8      not null,
     good_id      bigserial not null,
@@ -181,7 +181,7 @@ CREATE TABLE IF NOT EXISTS  goods_on_warehouses
     primary key (good_id, warehouse_id)
 );
 
-CREATE TABLE IF NOT EXISTS  order_items
+CREATE TABLE IF NOT EXISTS order_items
 (
     id       bigserial not null,
     price    float8,
@@ -191,7 +191,7 @@ CREATE TABLE IF NOT EXISTS  order_items
     primary key (id)
 );
 
-CREATE TABLE IF NOT EXISTS  orders
+CREATE TABLE IF NOT EXISTS orders
 (
     id                 bigserial not null,
     delivery_address   varchar(255),
@@ -201,7 +201,7 @@ CREATE TABLE IF NOT EXISTS  orders
     primary key (id)
 );
 
-CREATE TABLE IF NOT EXISTS  payment_method
+CREATE TABLE IF NOT EXISTS payment_method
 (
     id          bigserial not null,
     code        varchar(255),
@@ -210,7 +210,7 @@ CREATE TABLE IF NOT EXISTS  payment_method
     primary key (id)
 );
 
-CREATE TABLE IF NOT EXISTS  pricelist
+CREATE TABLE IF NOT EXISTS pricelist
 (
     id            bigserial not null,
     datefrom      date,
@@ -222,7 +222,7 @@ CREATE TABLE IF NOT EXISTS  pricelist
     primary key (id)
 );
 
-CREATE TABLE IF NOT EXISTS  status_history
+CREATE TABLE IF NOT EXISTS status_history
 (
     id        bigserial not null,
     date_from timestamp,
@@ -232,14 +232,14 @@ CREATE TABLE IF NOT EXISTS  status_history
     primary key (id)
 );
 
-CREATE TABLE IF NOT EXISTS  typeprice
+CREATE TABLE IF NOT EXISTS typeprice
 (
     id   bigserial not null,
     name varchar(255),
     primary key (id)
 );
 
-CREATE TABLE IF NOT EXISTS  users
+CREATE TABLE IF NOT EXISTS users
 (
     id       bigserial not null,
     enabled  boolean,
@@ -251,7 +251,7 @@ CREATE TABLE IF NOT EXISTS  users
     address  varchar(255),
     primary key (id)
 );
-CREATE TABLE IF NOT EXISTS  warehouses
+CREATE TABLE IF NOT EXISTS warehouses
 (
     id       bigserial not null,
     contacts varchar(255),
