@@ -1,0 +1,44 @@
+spring:
+  main:
+    banner-mode: "off"
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+  application:
+    name: eurekaserver
+
+server:
+  port: 8761
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, env, loggers, logfile, metrics, prometheus
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus: enabled    
+    shutdown:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true 
+
+
+app:
+  jwt:
+    signingkey: 123

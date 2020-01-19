@@ -1,0 +1,77 @@
+spring:
+  main:
+    banner-mode: "off"
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  application:
+    name: gaateway
+
+  cloud:
+    gateway:
+      routes:
+      - id: admin_route
+        uri: http://localhost:8081/microservices/v1/admin
+        predicates:
+        - Path=/microservices/v1/admin/**
+
+      - id: basket_route
+        uri: http://localhost:8083/microservices/v1/basket
+        predicates:
+        - Path=/microservices/v1/basket/**
+
+      - id: catalog_route
+        uri: http://localhost:8082/microservices/v2/catalog
+        predicates:
+        - Path=/microservices/v2/catalog/**
+
+      - id: cashed_catalog_route
+        uri: http://localhost:8090/microservices/v3/catalog
+        predicates:
+        - Path=/microservices/v3/catalog/**
+
+      - id: notification_route
+        uri: http://localhost:8086/microservices/v1/notification
+        predicates:
+        - Path=/microservices/v1/notification/**
+
+      - id: order_route
+        uri: http://localhost:8084/microservices/v1/order
+        predicates:
+        - Path=/microservices/v1/order/**
+
+      - id: admin_route
+        uri: http://localhost:8085/microservices/v1/admin
+        predicates:
+        - Path=/microservices/v1/admin/**
+
+server:
+  port: 8888
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, env, loggers, logfile, metrics, prometheus
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus: enabled    
+    shutdown:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true 
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+
+app:
+  jwt:
+    signingkey: 123
