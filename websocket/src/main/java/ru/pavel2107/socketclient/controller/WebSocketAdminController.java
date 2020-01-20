@@ -38,21 +38,21 @@ public class WebSocketAdminController {
         this.messagingTemplate = messagingTemplate;
     }
 
-    @GetMapping(value = "/microservices/v1/admin/chat/all_sessions", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/microservices/v1/chat/all_sessions", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Conversation> getSessions() {
         List<Conversation> list = conversationService.findAll();
         logger.info( "CHAT. GET_SESSIONS: {} ", list.size());
         return list;
     }
 
-    @GetMapping(value = "/microservices/v1/admin/chat/avail_sessions", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/microservices/v1/chat/avail_sessions", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Conversation> getAvailableSessions() {
         List<Conversation> list = conversationService.findAvailable();
         logger.info( "CHAT. GET_AVAIL_SESSIONS: {} ", list.size());
         return list;
     }
 
-    @PutMapping(value = "/microservices/v1/admin/chat/sendmessage")
+    @PutMapping(value = "/microservices/v1/chat/sendmessage")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void produceMessageFromOperator(Principal principal, @RequestParam String sessionId, @RequestParam String message) throws Exception {
         logger.info( "CHAT. SEND. OPER: {} ", principal.getName());

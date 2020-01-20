@@ -10,3 +10,8 @@ spring:
     name: gateway
   profiles:
     active: dev
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG

@@ -44,7 +44,7 @@ public class BasketController {
         return dto;
     }
 
-    @PostMapping(value = "/microservices/v1/user/basket/additem", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/microservices/v1/basket/additem", produces = MediaType.APPLICATION_JSON_VALUE)
     public OrderDto addItem(Principal principal, Long goodId, Integer count) {
         User user = findUser(principal);
         Good good = goodsService.find(goodId);
@@ -54,7 +54,7 @@ public class BasketController {
         return dto;
     }
 
-    @PostMapping(value = "/microservices/v1/user/basket/removeitem", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/microservices/v1/basket/removeitem", produces = MediaType.APPLICATION_JSON_VALUE)
     public OrderDto removeItem(Principal principal, Long goodId, Integer count) {
         User user = findUser(principal);
         Good good = goodsService.find(goodId);
