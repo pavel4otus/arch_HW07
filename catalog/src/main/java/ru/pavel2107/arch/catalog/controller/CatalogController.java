@@ -9,6 +9,7 @@ import ru.pavel2107.arch.catalog.dto.GoodDto;
 import ru.pavel2107.arch.catalog.service.GoodsService;
 import ru.pavel2107.arch.catalog.service.UserService;
 
+import javax.persistence.Column;
 import java.security.Principal;
 import java.util.List;
 
@@ -61,8 +62,9 @@ public class CatalogController {
         User user = null;
         if (principal != null) {
             user = userService.findByEmail(principal.getName());
+        } else {
+            user = new User( 0L, "guest", "NA", "", "", true, "ROLE_USER", "");
         }
-        ;
         return user;
     }
 }

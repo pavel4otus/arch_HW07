@@ -1,5 +1,7 @@
 package ru.pavel2107.arch.basket.controller;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +20,13 @@ import ru.pavel2107.arch.basket.service.BasketService;
 import ru.pavel2107.arch.basket.service.GoodsService;
 import ru.pavel2107.arch.basket.service.UserService;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.OneToMany;
 import java.security.Principal;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 public class BasketController {
@@ -66,6 +73,10 @@ public class BasketController {
 
     private User findUser(Principal principal) {
         User user = userService.findByEmail(principal.getName());
+        if( user == null){
+            user = new User( 0L, "guest", "NA", "", "", "", true, "ROLE_USER", new HashSet<>());
+        }
         return user;
     }
 }
+

@@ -258,6 +258,36 @@ services:
     entrypoint: [ "./wait_it.sh", "http://catalog:8082/actuator/health", "20", "5" ]
     command:    [ "java", "-jar", "hzcatalog.jar" ]
 
+  eurekaserver:
+    container_name: eurekaserver
+    networks:
+      - app
+    restart: on-failure
+    ports:
+      - 8761:8761
+    build:
+      context: .
+      dockerfile: Dockerfile.eurekaserver
+    depends_on:
+      - config
+    entrypoint: [ "./wait_it.sh", "http://config:7777/actuator/health", "20", "5" ]
+    command:    [ "java", "-jar", "eurekaserver.jar" ]
+
+  gateway:
+    container_name: gateway
+    networks:
+      - app
+    restart: on-failure
+    ports:
+      - 8888:8888
+    build:
+      context: .
+      dockerfile: Dockerfile.gateway
+    depends_on:
+      - config
+    entrypoint: [ "./wait_it.sh", "http://config:7777/actuator/health", "20", "5" ]
+    command:    [ "java", "-jar", "gateway.jar" ]
+
 
 networks:
   app:

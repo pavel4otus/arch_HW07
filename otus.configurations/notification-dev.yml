@@ -61,6 +61,12 @@ management:
       prometheus:
         enabled: true
 
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eurekaserver:8761/eureka/
+
+
 app:
   push:
     account_sid: ACffb38145b9c140cbcbff160dc18bfd1e

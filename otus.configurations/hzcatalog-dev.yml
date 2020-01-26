@@ -36,14 +36,16 @@ app:
     username: dev
     password: dev-pass
   brands:
-#    url: http://catalog:8082/microservices/v1/catalog/brands
     ttl: 60
   categories:
-#    url: http://catalog:8082/microservices/v1/catalog/categories
     ttl: 60
   warehouses:
-#    url: http://catalog:8082/microservices/v1/catalog/warehouses
     ttl: 5
   catalog:
-#    url: http://catalog:8082/microservices/v2/catalog
     ttl: 30
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eurekaserver:8761/eureka/
+

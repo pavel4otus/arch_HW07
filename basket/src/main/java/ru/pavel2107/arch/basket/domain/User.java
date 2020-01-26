@@ -9,6 +9,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -57,6 +58,7 @@ public class User {
     @Getter
     @Setter
     private Set<Order> orders = new HashSet<>();
+
 
     @Override
     public String toString() {

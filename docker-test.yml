@@ -1,0 +1,86 @@
+version: '3'
+services:
+
+  postgres:
+    container_name: postgres
+    networks:
+      - app
+    image: postgres:12
+    restart: on-failure
+    ports:
+      - 65430:5432
+    volumes:
+      - ./pgdata:/var/lib.postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=eshop
+
+
+  config:
+    container_name: config
+    restart: on-failure
+    networks:
+      - app
+    ports:
+      - 7778:7777
+    build:
+      context: .
+      dockerfile: Dockerfile.config
+    depends_on:
+      - postgres
+    volumes:
+      - ./config.configuration:/config.configuration
+      - ./otus.configurations:/otus.configurations
+
+
+  catalog:
+    container_name: catalog
+    networks:
+      - app
+    restart: on-failure
+    ports:
+      - 8882:8082
+    build:
+      context: .
+      dockerfile: Dockerfile.catalog
+    depends_on:
+      - postgres
+      - config
+    entrypoint: [ "./wait_it.sh", "http://config:7777/actuator/health", "20", "5" ]
+    command:    [ "java", "-jar", "catalog.jar" ]
+
+
+  eurekaserver:
+    container_name: eurekaserver
+    networks:
+      - app
+    restart: on-failure
+    ports:
+      - 8762:8761
+    build:
+      context: .
+      dockerfile: Dockerfile.eurekaserver
+    depends_on:
+      - config
+    entrypoint: [ "./wait_it.sh", "http://config:7777/actuator/health", "20", "5" ]
+    command:    [ "java", "-jar", "eurekaserver.jar" ]
+
+  gateway:
+    container_name: gateway
+    networks:
+      - app
+    restart: on-failure
+    ports:
+      - 8889:8888
+    build:
+      context: .
+      dockerfile: Dockerfile.gateway
+    depends_on:
+      - config
+    entrypoint: [ "./wait_it.sh", "http://config:7777/actuator/health", "20", "5" ]
+    command:    [ "java", "-jar", "gateway.jar" ]
+
+
+networks:
+  app:
