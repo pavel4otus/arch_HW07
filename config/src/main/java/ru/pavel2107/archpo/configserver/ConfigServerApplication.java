@@ -23,30 +23,18 @@ public class ConfigServerApplication {
         SpringApplication.run(ConfigServerApplication.class, args);
     }
 
-
     @Bean
     public WebSecurityConfigurerAdapter configurerAdapter(ServerProperties serverProperties) {
         return new WebSecurityConfigurerAdapter() {
 
             @Override
-            public void configure(WebSecurity webSecurity) {
-                webSecurity.ignoring().antMatchers("/actuator/health");
-            }
-
-
-            @Override
             protected void configure(HttpSecurity httpSecurity) throws Exception {
-                super.configure(httpSecurity);
-
-                httpSecurity.authorizeRequests()
-                        .antMatchers("**/encrypt/**")
-                        .authenticated().and().csrf().disable();
-
-                httpSecurity.authorizeRequests()
-                        .antMatchers("**/decrypt/**")
-                        .authenticated().and().csrf().disable();
-
-
+                httpSecurity
+                        .authorizeRequests()
+                        .antMatchers("/actuator/health").permitAll()
+                        .antMatchers("**/encrypt/**").authenticated()
+                        .antMatchers("**/decrypt/**").authenticated()
+                        .and().csrf().disable();
             }
         };
     }

@@ -2,32 +2,31 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.2.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>ru.pavel2107.arch</groupId>
+        <artifactId>eshop</artifactId>
+        <version>2.2.1.RELEASE</version>
+        <relativePath>../</relativePath> <!-- lookup parent from repository -->
     </parent>
-    <groupId>ru.pavel2107.arch</groupId>
     <artifactId>createschema</artifactId>
-    <version>2.2.1.RELEASE</version>
-    <name>createschema</name>
-    <description>Demo project for Spring Boot</description>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-        <spring-security-oauth2.version>2.3.5.RELEASE</spring-security-oauth2.version>
-        <spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
-    </properties>
-
 
     <dependencies>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-config-client -->
@@ -48,13 +47,6 @@
             <artifactId>log4j</artifactId>
             <version>2.13.0</version>
             <type>pom</type>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.2.9</version>
         </dependency>
 
         <dependency>

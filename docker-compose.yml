@@ -10,7 +10,7 @@ services:
     ports:
       - 65432:5432
     volumes:
-      - ./pgdata:/var/lib.postgresql/data
+      - ./services/pgdata:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -26,7 +26,7 @@ services:
       - 5672:5672
       - 15672:15672
     volumes:
-      - ./rabbit:/var/lib/rabbitmq/mnesia/
+      - ./services/rabbit:/var/lib/rabbitmq/mnesia/
 
   mongodb:
     container_name: mongodb
@@ -37,7 +37,7 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - ./mongo:/data
+      - ./services/mongodb:/data
 
   hazelcast:
     container_name: hazelcast
@@ -71,8 +71,8 @@ services:
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=12345
     volumes:
-      - ./grafana/provisioning:/etc/grafana/provisioning
-      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      - ./services/grafana/provisioning:/etc/grafana/provisioning
+      - ./services/grafana/dashboards:/var/lib/grafana/dashboards
 
   config:
     container_name: config

@@ -1,0 +1,132 @@
+spring:
+  main:
+    banner-mode: "off"
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  application:
+    name: gaateway
+
+  cloud:
+    gateway:
+      routes:
+      - id: admin_route
+        uri: http://admin:8081/microservices/v1/admin
+#        predicates:
+##        - Path=/microservices/v1/admin/**
+        predicates:
+        - Path=/api/v3/admin/**
+        filters:
+        - RewritePath=/api/v3/admin(?<segment>/?.*), /microservices/v1/admin$\{segment}
+
+
+      - id: auth_route
+        uri: http://authentication:9999/oauth/token
+        predicates:
+        - Path=/oauth/token
+
+
+      - id: basket_route
+        uri: http://basket:8083/microservices/v1/basket
+#        predicates:
+#        - Path=/microservices/v1/basket/**
+        predicates:
+        - Path=/api/v3/basket/**
+        filters:
+        - RewritePath=/api/v3/basket(?<segment>/?.*), /microservices/v1/basket$\{segment}
+
+
+#
+# работающий вариант
+#
+#      - id: catalog_route
+#        uri: http://localhost:8082/microservices/v2/catalog
+#        predicates:
+#        - Path=/microservices/v2/catalog/**
+      - id: api_route
+        uri: http://catalog:8082
+        predicates:
+        - Path=/api/v3/catalog/**
+        filters:
+        - RewritePath=/api/v3/catalog(?<segment>/?.*), /microservices/v2/catalog$\{segment}
+          
+
+      - id: cashed_catalog_route
+        uri: http://hzcatalog:8090/microservices/v3/catalog
+#        predicates:
+#        - Path=/microservices/v3/catalog/**
+        predicates:
+        - Path=/api/v3/cashed_catalog/**
+        filters:
+        - RewritePath=/api/v3/cashed_catalog(?<segment>/?.*), /microservices/v3/catalog$\{segment}
+
+
+      - id: notification_route
+        uri: http://notification:8086/microservices/v1/notification
+#        predicates:
+#        - Path=/microservices/v1/notification/**
+        predicates:
+        - Path=/api/v3/notification/**
+        filters:
+        - RewritePath=/api/v3/notification(?<segment>/?.*), /microservices/v1/notification$\{segment}
+
+
+      - id: order_route
+        uri: http://order:8084/microservices/v1/order
+#        predicates:
+#        - Path=/microservices/v1/order/**
+        predicates:
+        - Path=/api/v3/order/**
+        filters:
+        - RewritePath=/api/v3/order(?<segment>/?.*), /microservices/v1/order$\{segment}
+
+
+      - id: registration_route
+        uri: http://registration:8085/microservices/v1/users
+#        predicates:
+#        - Path=/microservices/v1/users/**
+        predicates:
+        - Path=/api/v3/users/**
+        filters:
+        - RewritePath=/api/v3/users(?<segment>/?.*), /microservices/v1/users$\{segment}
+
+      - id: websocket_route
+        uri: http://websocket:8085/microservices/v1/chat
+#        predicates:
+#        - Path=/microservices/v1/chat/**
+        predicates:
+        - Path=/api/v3/chat/**
+        filters:
+        - RewritePath=/api/v3/chat(?<segment>/?.*), /microservices/v1/chat$\{segment}
+
+
+server:
+  port: 8888
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, env, loggers, logfile, metrics, prometheus
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus: enabled    
+    shutdown:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true 
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://gateway:8761/eureka/
+
+
+app:
+  jwt:
+    signingkey: 123

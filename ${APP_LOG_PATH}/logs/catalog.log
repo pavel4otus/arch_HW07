@@ -1,0 +1,3 @@
+2020-01-28 23:01:58,652 INFO r.p.a.c.CatalogServiceStarter [main] The following profiles are active: dev
+2020-01-28 23:02:14,012 INFO r.p.a.c.CatalogServiceStarter [main] Started CatalogServiceStarter in 21.147 seconds (JVM running for 24.304)
+2020-01-28 23:04:21,721 INFO r.p.a.c.c.BrandController [http-nio-8082-exec-1] BRANDS. Список брендов
